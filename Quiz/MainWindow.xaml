@@ -5,17 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Quiz"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
-        <StackPanel Margin="0,0,0,357" Orientation="Horizontal" >
-            <Label Content="Вопрос:" FontSize="16" HorizontalAlignment="Left"></Label>
-            <Label x:Name="label_Question" Width="730" FontSize="16"/>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Content="Вопрос:" FontSize="16" HorizontalAlignment="Left"></Label>
+                <Label x:Name="label_Question" Width="562" FontSize="16"/>
+                <Label x:Name="label_Attempt" Content="Попыток:" FontSize="16"></Label>
+                <Label x:Name="label_AttemptValue" Content="5" FontSize="16"></Label>
+            </StackPanel>
+            <StackPanel x:Name="TB_Panel" HorizontalAlignment="Right" Width="651" Orientation="Horizontal" Height="193">
+               
+            </StackPanel>
+            <WrapPanel x:Name="Buttons_Panel" Orientation="Horizontal" HorizontalAlignment="Center" Width="270" Height="100"/>
+            <StackPanel HorizontalAlignment="Left" Width="792" Orientation="Horizontal" Height="121" >
+                <Button x:Name="btn_Erase" FontWeight="Bold" FontSize="18" Content="Стереть ответ" Height="51" Width="128" HorizontalAlignment="Left" Margin="55,0,0,0" Click="btn_Erase_Click"/>
+                <Button x:Name="btn_Answer" FontWeight="Bold" FontSize="18" Content="Ответить!" Height="51" Width="128" HorizontalAlignment="Right" Margin="425,0,0,0" Click="btn_Answer_Click"/>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Margin="0,77,0,217" x:Name="TB_Panel" Orientation="Horizontal" HorizontalAlignment="Center" Width="800"></StackPanel>
-        <WrapPanel x:Name="Buttons_Panel" Margin="225,222,0,79" Orientation="Horizontal" HorizontalAlignment="Left" Width="350" Grid.ColumnSpan="2"/>
-        <StackPanel Margin="4,355,0,6" HorizontalAlignment="Left" Width="792" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <Button x:Name="btn_Erase" FontWeight="Bold" FontSize="18" Content="Стереть ответ" Height="51" Width="128" HorizontalAlignment="Left" Margin="55,0,0,0" Click="btn_Erase_Click"/>
-            <Button x:Name="btn_Answer" FontWeight="Bold" FontSize="18" Content="Ответить!" Height="51" Width="128" HorizontalAlignment="Right" Margin="425,0,0,0" Click="btn_Answer_Click"/>
-        </StackPanel>
+        
     </Grid>
 </Window>

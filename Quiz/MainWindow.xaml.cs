@@ -24,6 +24,9 @@ namespace Quiz
         string abc = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         string answer;
         string MyAnswer;
+        int Attempts = 5;
+        int CurrentAnswer = 0;
+        int Questions;
         Question question;
         TextBox[] tbArray;
         Button[] btnArray;
@@ -31,6 +34,8 @@ namespace Quiz
         static MongoClient client = new MongoClient();
         static IMongoDatabase database = client.GetDatabase("QuestionsDB");
         static IMongoCollection<Question> collection = database.GetCollection<Question>("Questions");
+
+        List<Question> list = collection.AsQueryable().ToList<Question>();
 
         public MainWindow()
         {
@@ -43,16 +48,32 @@ namespace Quiz
 
         void LoadQuestion()
         {
-            MyAnswer = string.Empty;
-            List<Question> list = collection.AsQueryable().ToList<Question>();
+            MyAnswer = string.Empty;    
             if (question != null)
             {
-                list.Remove(question);
+                foreach (var i in list.ToList())
+                {
+                    if (i.Question_Name == question.Question_Name)
+                    {
+                        list.Remove(i);
+                    }
+                }
             }
-            Random rnd= new Random();
-            int num = rnd.Next(list.Count);
-            label_Question.Content = list[num].Question_Name;
-            answer = list[num].Answer;
+            Questions = list.Count;
+            if (Questions == 0)
+            {
+                MessageBox.Show("Вы победили!");
+                this.Close();
+            }
+
+            else
+            {
+                Random rnd = new Random();
+                int num = rnd.Next(list.Count);
+                label_Question.Content = list[num].Question_Name;
+                answer = list[num].Answer;
+            }
+                
         }
 
         void LoadTextBox()
@@ -80,7 +101,7 @@ namespace Quiz
         void LoadButtons()
         {
             Buttons_Panel.Children.Clear();
-            btnArray = new Button[42];
+            btnArray = new Button[40];
             Random rnd = new Random();
             char[] b = new char[abc.Length];
             for (int i = 0; i < abc.Length; i++)
@@ -166,18 +187,32 @@ namespace Quiz
             }
 
             if (MyAnswer == answer)
-            {
-                MessageBox.Show("Победа!");
+            { 
+                MessageBox.Show($"Правильный ответ! {"\n"} Осталось вопросов: {Questions - 1}");
                 question = collection.Find(x => x.Question_Name == label_Question.Content.ToString()).FirstOrDefault();
                 LoadQuestion();
                 LoadTextBox();
                 LoadButtons();
+                CurrentAnswer++;
             }
 
             else
             {
-                MessageBox.Show("Неправильный ответ!");
-                EraseAll();
+                Attempts--;
+                label_AttemptValue.Content = Attempts.ToString();
+                
+                
+                if (Attempts == 0)
+                {
+                    MessageBox.Show($"Вы проиграли! {"\n"} Правильных ответов за игру: {CurrentAnswer}");
+                    this.Close();
+                }
+
+                else
+                {
+                    MessageBox.Show($"Неправильный ответ! {"\n"} Осталось попыток: {Attempts}");
+                    EraseAll();
+                }
             }
         }
 
